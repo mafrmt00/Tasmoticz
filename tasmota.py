@@ -430,11 +430,12 @@ def updateStateDevices(fullName, cmndName, message):
 # Update domoticz device related to tasmota RESULT message (e.g. on power on/off)
 def updateResultDevice(fullName, message):
     idxs = findDevices(fullName)
-    attr, value = next(iter(message.items()))
-    for idx in idxs:
-        description = json.loads(Devices[idx].Description)
-        if description['Command'] == attr:
-            updateValue(idx, attr, value)
+    if hasattr(message, 'items'):
+        attr, value = next(iter(message.items()))
+        for idx in idxs:
+            description = json.loads(Devices[idx].Description)
+            if description['Command'] == attr:
+                updateValue(idx, attr, value)
 
 
 # Update domoticz device values related to tasmota SENSOR message, create device if it does not exist yet
